@@ -2,6 +2,7 @@ import sys
 import re
 import string
 
+
 def makepattern(letters,excluded_letters=''):
 	new_pattern = ''
 	used_letters = set(letters).difference(set('?'))
@@ -11,8 +12,7 @@ def makepattern(letters,excluded_letters=''):
 			new_pattern += '[' + ''.join(good_letters) + ']'
 		else:
 			new_pattern += l
-	new_pattern += '$'
-	print new_pattern
+	new_pattern += '$'	
 	return re.compile(new_pattern)
 
 
@@ -23,6 +23,7 @@ def testmatch(pattern,word):
 		return False
 
 def main():
+	counts = dict([(l, 0) for l in string.ascii_lowercase])	
 	f = file(sys.argv[1],'rU')
 	if len(sys.argv) > 3:
 		bad_letters = sys.argv[3]
@@ -32,6 +33,11 @@ def main():
 	for word in f.readlines():
 		if testmatch(r,word.strip()):
 			print word.strip()
+			for l in word.strip():
+				counts[l] += 1
+	for l in counts:
+		if l not in sys.argv[2] and counts[l] > 0:
+			print l + ': ' + str(counts[l])
 
 if __name__ == '__main__':
 	main()

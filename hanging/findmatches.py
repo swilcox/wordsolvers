@@ -1,6 +1,7 @@
 import sys
 import re
 import string
+import operator
 
 
 def makepattern(letters,excluded_letters=''):
@@ -35,9 +36,10 @@ def main():
 			print word.strip()
 			for l in word.strip():
 				counts[l] += 1
-	for l in counts:
-		if l not in sys.argv[2] and counts[l] > 0:
-			print l + ': ' + str(counts[l])
+	
+	for l,c in sorted(counts.iteritems(), key=operator.itemgetter(1),reverse=True):	
+		if l not in sys.argv[2] and c > 0:
+			print l + ': ' + str(c)
 
 if __name__ == '__main__':
 	main()
